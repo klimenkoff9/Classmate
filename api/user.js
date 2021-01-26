@@ -3,10 +3,13 @@ const router = express.Router();
 const { User } = require('../db/models');
 
 // Express Routes for Players - Read more on routing at https://expressjs.com/en/guide/routing.html
-router.get('/', async (req, res, next) => {
+router.post('/', async (req, res, next) => {
   try {
-      // ? res.status(404).send('User Account Not Found')
-      // : res.status(200).json(allPlayers);
+    const newUser = await User.create({
+      email: req.body.email,
+      password: req.body.password
+    });
+		res.status(200).json(newUser);
   } catch (error) {
     next(error);
   }
