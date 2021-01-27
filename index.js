@@ -5,33 +5,44 @@ const compression = require('compression');
 const cors = require('cors');
 const path = require('path');
 const session = require('express-session');
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
+const db = require('./db');
 const flash = require('express-flash');
+const passport = require('passport');
+const sessionStore = new SequelizeStore({ db });
 
 //IMPORTS/VARIABLES
 const PORT = process.env.PORT || 8080;
-const db = require('./db');
 
 const app = express();
-
-app.use(
-  session({
-    secret: "secret",
-
-    resave: false,
-
-    saveUninitialized: false,
-
-
-  })
-);
-
-
 
 //CORS!
 app.use(cors());
 
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await db.models.user.findByPk(id);
+    done(null, user);
+  } catch (error) {
+    done(error);
+  }
+})
 
 app.use(express.json());
+app.use(session({
+  secret: process.env.sessionSecret || "d3p4k",
+  store: sessionStore,
+  resave: false,
+  saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 //Mount on API
 app.use('/api', require('./api'));
 
