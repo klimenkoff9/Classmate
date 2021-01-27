@@ -19,13 +19,14 @@ const app = express();
 //CORS!
 app.use(cors());
 
+// Middleware
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
-passport.deserializeUser(async (id, done) => {
+passport.deserializeUser(async (users, done) => {
   try {
-    const user = await db.models.user.findByPk(id);
+    const user = await db.models.user.findByPk(users.id);
     done(null, user);
   } catch (error) {
     done(error);

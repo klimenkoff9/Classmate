@@ -5,22 +5,21 @@ const User = require('../db/models/user');
 
 router.post("/signup", async (req, res, next) => {
   try {
-  console.log(req.body);
-  const newUser = User.create({
-    email: req.body.email,
-    password: req.body.password
-  })
-  // if (!newUser) {
-  //     console.log("No user found");
-  //     res.status(401).send("User already exists");
-  // } else if (req.body.email.includes("@brooklyn.cuny.edu") || req.body.email.includes("@bcmail.cuny.edu")) {
-  //   console.log("Not school email");
-  //   res.status(401).send("Only available to Brooklyn College students/faculty");
-  // } else {
+  if (req.body.email === "" || req.body.email === null) {
+    
+  } else if (!req.body.email.includes("@brooklyn.cuny.edu") && !req.body.email.includes("@bcmail.cuny.edu")) {
+    console.log(req.body.email);
+    res.status(401).send("Only available to Brooklyn College students/faculty");
+  } else {
+    const newUser = await User.create({
+      email: req.body.email,
+      password: req.body.password
+    })
     res.status(200).json(newUser)
-    // req.login(user, err => (err ? next(err) : 
+  }
+
   } catch (error) {
-    next(error);
+    res.status(401).send(error.name);
   }
 });
 
@@ -31,7 +30,7 @@ router.post("/login", async (req, res, next) => {
   const user = await User.findOne({
     where: { email: req.body.email }
   })
-  console.log(user);
+  
   if (!user) {
       console.log("No user found");
       res.status(401).send("Wrong username or password");
