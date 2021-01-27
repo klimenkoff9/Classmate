@@ -7,9 +7,17 @@ const bcrypt = require('bcrypt');
 // Route paths are prepended with /api/user/
 router.post("/", async (req, res, next) => {
 	try {
-    let hashedPassword = await bcrypt.hash(req.body.password, 10);
-    res.status(200).json(hashedPassword);
-    console.log(req.body.password);
+    let { email, password } = req.body;
+    let hashedPassword = await bcrypt.hash(password, 10);
+    const users = await User.create({
+      email: email,
+      password: hashedPassword
+    })
+    User.prototype.validPassword = async function(password) {
+      return await bcrypt.compare(password, this.password);
+  } 
+  console.log(await bcrypt.compare(password, users.password));
+    res.status(200).json(users);
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ message: "Can't read request" });

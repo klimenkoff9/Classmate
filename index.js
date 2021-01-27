@@ -4,6 +4,8 @@ const morgan = require('morgan');
 const compression = require('compression');
 const cors = require('cors');
 const path = require('path');
+const session = require('express-session');
+const flash = require('express-flash');
 
 //IMPORTS/VARIABLES
 const PORT = process.env.PORT || 8080;
@@ -11,9 +13,25 @@ const db = require('./db');
 
 const app = express();
 
+app.use(
+  session({
+    secret: "secret",
+
+    resave: false,
+
+    saveUninitialized: false,
+
+
+  })
+);
+
+
+
 //CORS!
 app.use(cors());
 
+
+app.use(express.json());
 //Mount on API
 app.use('/api', require('./api'));
 
