@@ -1,13 +1,12 @@
-const Sequelize = require('sequelize');
-require('dotenv').config();
+const Sequelize = require('sequelize')
+require('dotenv').config()
 
 // Initialize database with Sequelize
-const db = new Sequelize(process.env.DATABASE_NAME, process.env.DATABASE_USER, process.env.DATABASE_PASS, {
-  host : "localhost",
-  dialect: "postgres",
-  logging: false
-});
+const db = new Sequelize('capstone', 'unode', 'root', {
+  host: 'localhost',
+  dialect: 'postgres',
+  logging: false,
+  port: 5433,
+})
 
-module.exports = db;
-
-
+module.exports = db
