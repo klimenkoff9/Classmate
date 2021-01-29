@@ -54,6 +54,9 @@ router.post("/signup", async (req, res, next) => {
   });
   
   router.get("/me", async (req, res, next) => {
+    console.log("------")
+    console.log(req.user);
+    console.log("------")
     res.json(req.user);
   })
   
@@ -61,7 +64,7 @@ router.post("/signup", async (req, res, next) => {
     req.logout();
     req.session.destroy();
     res.redirect("/");
-    res.status(200);
+    console.log("I'm log out");
   })
   
   module.exports = router;

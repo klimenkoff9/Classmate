@@ -22,11 +22,15 @@ app.use(cors());
 // Middleware
 passport.serializeUser((user, done) => {
   done(null, user.id);
+  // console.log(user);
+  // console.log("---------");
 });
 
 passport.deserializeUser(async (id, done) => {
   try {
-    const user = await db.models.user.findByPk(id.id);
+    const user = await db.models.user.findByPk(id);
+    // console.log(user);
+    // console.log("---------")
     done(null, user);
   } catch (error) {
     done(error);
@@ -37,11 +41,15 @@ app.use(express.json());
 app.use(express.urlencoded(
   {extended: true}
 ));
+
 app.use(session({
   secret: process.env.sessionSecret || "d3p4k",
   store: sessionStore,
-  resave: false,
-  saveUninitialized: false
+  resave: true,
+  saveUninitialized: true,
+  cookie: {
+    maxAge: 60*60*1000
+  }
 }));
 
 app.use(passport.initialize());
