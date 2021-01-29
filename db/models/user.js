@@ -2,8 +2,7 @@ const Sequelize = require('sequelize');
 const db = require('../db');
 const crypto = require ('crypto');
 
-//Sample Model  Read More At https://sequelize.org/master/manual/model-basics.html
-
+// Create table
 const User = db.define('user', {
   email: {
     type: Sequelize.STRING,
@@ -27,31 +26,6 @@ const User = db.define('user', {
 });
 
 module.exports = User;
-
-// User.prototype.correctPassword = (password) => {
-//   return User.encryptPassword(password, this.salt) === this.password();
-// }
-
-// User.generateSalt = function() {
-//   return crypto.randomBytes(16).toString("base64")
-// }
-
-// User.encryptPassword = function(text, salt) {
-//   return crypto.createHash('RSA-SHA256').update(text).update(salt).digest('hex');
-// }
-
-// const setSaltPass = (user) => {
-//   if (user.changed('password')) {
-//     user.salt = User.generateSalt()
-//     user.password = User.encryptPassword(user.password(), user.salt())
-//   }
-// }
-
-// User.beforeCreate(setSaltPass);
-// User.beforeUpdate(setSaltPass);
-// User.beforeBulkCreate(user => {
-//   user.forEach(setSaltPass)
-// })
 
 /**
  * instanceMethods
