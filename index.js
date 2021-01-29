@@ -24,9 +24,9 @@ passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
-passport.deserializeUser(async (users, done) => {
+passport.deserializeUser(async (id, done) => {
   try {
-    const user = await db.models.user.findByPk(users.id);
+    const user = await db.models.user.findByPk(id.id);
     done(null, user);
   } catch (error) {
     done(error);
@@ -34,6 +34,9 @@ passport.deserializeUser(async (users, done) => {
 })
 
 app.use(express.json());
+app.use(express.urlencoded(
+  {extended: true}
+));
 app.use(session({
   secret: process.env.sessionSecret || "d3p4k",
   store: sessionStore,
@@ -46,6 +49,7 @@ app.use(passport.session());
 
 //Mount on API
 app.use('/api', require('./api'));
+app.use('/auth', require('./auth'));
 
 //START BACKEND SERVER FUNCTIOON
 const serverRun = () => {
