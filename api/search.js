@@ -1,7 +1,9 @@
 const express = require('express')
 const router = express.Router()
 const Search = require('../db/models/search')
-const { Op } = require('sequelize')
+const {
+  Op
+} = require('sequelize')
 
 /* // api/search/class/:className/:classNumber
  *
@@ -21,13 +23,19 @@ router.get('/class/:className/:classNumber', async (req, res, next) => {
   try {
     const classes = await Search.findAll({
       where: {
-        className: { [Op.like]: className },
-        classNumber: { [Op.like]: classNumber },
+        className: {
+          [Op.like]: className
+        },
+        classNumber: {
+          [Op.like]: classNumber
+        },
       },
     })
     res.status(200).json(classes)
   } catch (error) {
-    res.status(500).json({ message: 'An error occured' })
+    res.status(500).json({
+      message: 'An error occured'
+    })
     next(error)
   }
 })
@@ -45,12 +53,16 @@ router.get('/faculty/:facultyName', async (req, res, next) => {
     const classes = await Search.findAll({
       where: {
         // iLike is case-insensitive
-        facultyName: { [Op.iLike]: facultyName },
+        facultyName: {
+          [Op.iLike]: facultyName
+        },
       },
     })
     res.status(200).json(classes)
   } catch (error) {
-    res.status(500).json({ message: 'An error occured' })
+    res.status(500).json({
+      message: 'An error occured'
+    })
     next(error)
   }
 })
@@ -96,9 +108,33 @@ router.get('/get', async (req, res, next) => {
 
     res.status(200).json(classes)
   } catch (error) {
-    res.status(500).json({ message: 'An error occured' })
+    res.status(500).json({
+      message: 'An error occured'
+    })
     next(error)
   }
 })
+
+// Get info for a single class
+
+router.get("/class/:id", async (req, res, next) => {
+  try {
+    console.log(req.params.id);
+    const info = await Search.findOne({
+      where: {
+        id: req.params.id
+      }
+    })
+    console.log(info);
+      if (!info) {
+        res.status(200).send("No info found");
+      } else {
+        res.status(200).json(info);
+      }
+    } catch (error) {
+    next(error);
+  }
+});
+
 
 module.exports = router
