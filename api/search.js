@@ -116,7 +116,7 @@ router.get('/get', async (req, res, next) => {
 })
 
 // Get info for a single class
-
+// http://localhost:8080/api/search/class/:id
 router.get("/class/:id", async (req, res, next) => {
   try {
     console.log(req.params.id);
