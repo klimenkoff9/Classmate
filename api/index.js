@@ -5,6 +5,7 @@ module.exports = router;
 router.use('/user', require('./user'));
 router.use('/search', require('./search'));
 router.use('/review', require('./review'));
+router.use('/file', require('./file'));
 
 //Anything not found gets a 404
 router.use((req, res, next) => {

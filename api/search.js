@@ -97,7 +97,7 @@ router.get('/id/:id', async (req, res, next) => {
  * You may set any of the three fields empty (facultyName, className, classNumber)
  * and it will IGNORE those specific fields you've left empty in its search
  */
-router.get('/get', async (req, res, next) => {
+router.post('/get', async (req, res, next) => {
   let facultyName = req.body.facultyName
   let className = req.body.className
   let classNumber = req.body.classNumber
