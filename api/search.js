@@ -67,6 +67,28 @@ router.get('/faculty/:facultyName', async (req, res, next) => {
   }
 })
 
+/* // api/search/id/:id
+ *
+ * This route allows user to search for a section with a specific id
+ */
+router.get('/id/:id', async (req, res, next) => {
+  const id = req.params.id
+
+  console.log('Search (id) -->', id)
+
+  try {
+    const classes = await Search.findAll({
+      where: {
+        id: id,
+      },
+    })
+    res.status(200).json(classes)
+  } catch (error) {
+    res.status(500).json({ message: 'An error occured' })
+    next(error)
+  }
+})
+
 /* // api/search/get
  *
  * This route allows user to search for a specific faculty with a specific class
@@ -75,7 +97,7 @@ router.get('/faculty/:facultyName', async (req, res, next) => {
  * You may set any of the three fields empty (facultyName, className, classNumber)
  * and it will IGNORE those specific fields you've left empty in its search
  */
-router.get('/get', async (req, res, next) => {
+router.post('/get', async (req, res, next) => {
   let facultyName = req.body.facultyName
   let className = req.body.className
   let classNumber = req.body.classNumber
