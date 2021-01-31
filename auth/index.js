@@ -15,11 +15,11 @@ router.post("/signup", async (req, res, next) => {
       console.log("No match");
       res.status(200).send("Passwords don't match");
     } else {
-      await User.create({
+      const user = await User.create({
         email: req.body.email,
         password: req.body.password
       })
-      res.status(200).send("Signed up successfully!")
+      req.login(user, err => (err ? next(err) : res.status(200).json(user)))
     }
   
     } catch (error) {
